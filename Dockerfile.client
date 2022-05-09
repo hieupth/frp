@@ -1,7 +1,7 @@
-FROM golang:latest AS building
+FROM golang:alpine AS building
 
-RUN apk update && apk add git
-RUN git clone https://github.com/fatedier/frp.git building
+RUN apk update && apk add git make
+RUN git clone https://github.com/fatedier/frp.git /building
 WORKDIR /building
 
 RUN make frpc
