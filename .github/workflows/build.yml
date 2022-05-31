@@ -29,12 +29,12 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           file: Dockerfile.client
-          tags: hieupth/frp:client
+          tags: hieupth/frpc:latest
           push: true
       -
         name: Build server
         uses: docker/build-push-action@v3
         with:
           file: Dockerfile.server
-          tags: hieupth/frp:server
+          tags: hieupth/frps:latest
           push: true
