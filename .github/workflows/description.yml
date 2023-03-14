@@ -23,7 +23,7 @@ jobs:
         password: ${{ secrets.DOCKERHUB_TOKEN }}
     - 
       name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v2
     - 
       name: Update docker description
       uses: peter-evans/dockerhub-description@v2
