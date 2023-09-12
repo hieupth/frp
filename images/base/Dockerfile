@@ -21,7 +21,7 @@ RUN apk update && \
 COPY --from=BUILD /build/bin/${VARIANT} /usr/bin/frp
 # Copy necessary scripts.
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
-COPY frps.ini /etc/frp/frp.ini
+COPY ${VARIANT}.ini /etc/frp/frp.ini
 RUN chmod +x /usr/local/bin/entrypoint.sh
 # Setup entrypoint
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
