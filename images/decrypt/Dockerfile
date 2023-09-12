@@ -6,7 +6,8 @@ RUN apk update && \
     apk upgrade && \
     apk add --update git && \
     apk add --no-cache --virtual .build-deps linux-headers gcc musl-dev && \
-    pip install ansible-vault && \
+    apk add --no-cache libffi-dev && \
+    pip install --no-cache-dir ansible-vault && \
     apk del .build-deps
 # Overwrite entrypoint.
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
