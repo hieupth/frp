@@ -1,4 +1,5 @@
-ARG VARIANT=frpc
+ARG VARIANT=frps
+ARG BASE=alpine:3
 
 FROM golang:alpine AS BUILD
 # Recall arguments.
@@ -11,7 +12,7 @@ RUN git clone https://github.com/fatedier/frp.git /build
 WORKDIR /build
 RUN make ${VARIANT}
 
-FROM python:3-alpine
+FROM ${BASE}
 # Recall arguments.
 ARG VARIANT
 # Install packages.
@@ -21,7 +22,6 @@ RUN apk update && \
 COPY --from=BUILD /build/bin/${VARIANT} /usr/bin/frp
 # Copy necessary scripts.
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
-COPY ${VARIANT}.ini /etc/frp/frp.ini
 RUN chmod +x /usr/local/bin/entrypoint.sh
 # Setup entrypoint
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
