@@ -10,7 +10,7 @@ RUN apk update && apk add --no-cache git make
 RUN git clone https://github.com/fatedier/frp.git /build
 # Build frp from source.
 WORKDIR /build
-RUN make ${VARIANT}
+RUN git checkout master && make ${VARIANT}
 
 FROM ${BASE}
 # Recall arguments.
