@@ -1,33 +1,34 @@
 name: Update Description
 
 on:
-  workflow_dispatch:
   push:
     branches:
       - 'main'
     paths:
       - README.md
+  workflow_run:
+    workflows: ["Build image"]
+    types:
+      - completed
+  workflow_dispatch:
 
 jobs:
   update-description:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        variant: [frps, frpc]
     steps:
-    - 
-      name: Login to DockerHub
-      uses: docker/login-action@v2
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
-    - 
-      name: Checkout
-      uses: actions/checkout@v2
-    - 
-      name: Update docker description
-      uses: peter-evans/dockerhub-description@v2
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
-        repository: ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.variant }}
+      - 
+        name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - 
+        name: Checkout
+        uses: actions/checkout@v2
+      - 
+        name: Update docker description
+        uses: peter-evans/dockerhub-description@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          repository: ${{ secrets.DOCKERHUB_USERNAME }}/frp

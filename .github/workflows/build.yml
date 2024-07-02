@@ -1,4 +1,4 @@
-name: Build images
+name: Build image
 
 on:
   workflow_dispatch:
@@ -6,10 +6,8 @@ on:
     branches:
       - 'main'
     paths:
-      - Dockerfile
-      - scripts/*
-  schedule:
-    - cron: '0 0 * * 0'
+      - 'Dockerfile'
+      - 'entrypoint.sh'
 
 jobs:
   build:
@@ -17,6 +15,11 @@ jobs:
     strategy:
       matrix:
         variant: [frps, frpc]
+        include:
+          - variant: frps
+            tag: server
+          - variant: frpc
+            tag: client
     steps:
       -
         name: Set up QEMU
@@ -40,8 +43,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          file: Dockerfile
-          platforms: linux/amd64,linux/arm64,linux/ppc64le
-          tags: hieupth/${{ matrix.variant }}:latest
+          platforms: linux/amd64,linux/arm64
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/frp:${{ matrix.tag }}
           build-args: |
             VARIANT=${{ matrix.variant }}
