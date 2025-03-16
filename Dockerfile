@@ -16,7 +16,7 @@ FROM ${BASE}
 # Recall arguments.
 ARG VARIANT
 # Install packages.
-RUN apk update && apk upgrade
+RUN apk update && apk upgrade && apk add --no-cache curl
 # Copy compiled bin.
 COPY --from=BUILD /build/bin/${VARIANT} /usr/bin/frp
 ADD entrypoint.sh /bin/entrypoint.sh
