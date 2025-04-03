@@ -16,9 +16,11 @@ FROM ${BASE}
 # Recall arguments.
 ARG VARIANT
 # Install packages.
-RUN apk update && apk upgrade && apk add --no-cache curl
+RUN apk update && apk upgrade && apk add --no-cache curl tini
 # Copy compiled bin.
 COPY --from=BUILD /build/bin/${VARIANT} /usr/bin/frp
-ADD entrypoint.sh /bin/entrypoint.sh
-# Setup entrypoint
-ENTRYPOINT ["/bin/entrypoint.sh"]
+COPY  ./entrypoint.sh /entrypoint.sh
+# Set tini.
+ENTRYPOINT ["tini", "-g", "--"]
+# Default CMD
+CMD [ "/bin/sh", "/entrypoint.sh" ]
