@@ -1,0 +1,31 @@
+networks:
+  proxynetwork:
+    driver: bridge
+
+services:
+  tunnel:
+    image: hieupth/frp:server
+    container_name: tunnel
+    restart: always
+    # Security: Run as non-root user
+    user: 999:999
+    # Security: Read-only root filesystem
+    read_only: true
+    # Security: Drop all capabilities
+    cap_drop:
+      - ALL
+    # Security: No new privileges
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - proxynetwork
+    ports:
+      - 7000:7000
+      - 2095:2095
+    volumes:
+      - ~/ssl:/ssl:ro
+      - ./frps.toml:/etc/frp/frp.toml:ro
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
